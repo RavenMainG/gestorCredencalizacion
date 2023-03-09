@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+     <link rel="stylesheet" href="">
+    <title>Formulario</title>
+  </head>
+  <body class="container bg-dark">
+    <div text-align="left">
+        <img class="img-fluid mx-auto d-block"  src="{% static 'img/Imagen1.png'%}">
+        <div class="p-3 mb-2 bg-transparent text-body">
+          <div align="center" >
+            <h6 class="text-white">&#34 Innovación y Tecnología al servicio de la Sociedad &#34</h6>
+          </div>
+        </div>
+      </div>
+      <form class="row g-3 mt-3 ">
+        <h1 class="display-5 text-primaty text-center text-white"><b>Registro personal</b></h1>
+        <div class="col-6">
+          <label for="inputName" class="form-labeñ text-white">Nombre &#58</label>
+          <input type="text" class="form-control" id="inputName" placeholder="Escribe tu nombre">
+        </div>
+        <div class="col-6">
+          <label for="inputLast" class="form-labeñ text-white">Apellidos &#58</label>
+          <input type="text" class="form-control" id="inputName" placeholder="Escribe tus apellidos">
+        </div>
+        <div class="col-12">
+          <label for="emailInput" class="form-label text-white">Email &#58 </label>
+          <input
+            type="text"
+            placeholder="Escribe tu nombre"
+            class="form-control"
+            id="emailInput"
+          />
+        </div>
+        <div class="col-6">
+          <label for="inputPerson" class="form-label text-white">Matricula &#58 </label>
+          <input type="text" class="form-control" id="inputPerson" placeholder="Escriba tu id">
+        </div>
+         <div class="col-6">
+          <label for="inputPhone" class="form-label text-white">Numero de telefono &#58</label>
+          <input type="number" class="form-control" id="inputPhone" placeholder="Numer de Telefono">
+        </div>
+        <div class="col-12">
+          <label for="inputAdress" class="form-label text-white">Direccion &#58</label>
+          <input type="text" class="form-control"  id="inputAdress" placeholder="Direccion">
+        </div>
+        <div class="col-6">
+          <label for="dateInput" class="form-label text-white">Fecha nacimiento &#58</label>
+          <input type="date" class="form-control" id="dateInput">
+        </div>
+        <div class="col-6">
+          <label for="" class="form-label text-white">Tipo alumno &#58</label>
+          <select class="form-select " aria-label="Default select example">
+            <option  selected>Seleciones una opcion</option>
+            <option value="1">Licenciatura</option>
+            <option value="2">Maestria</option>
+          </select>
+        </div>
+        <div>
+          <div class="col-12">
+            <label for="" class="form-label text-white">Carrera o Maestria &#58</label>
+            <select class="form-select " aria-label="Default select example">
+              <option  selected>Seleciones una opcion</option>
+              <option  selected>Seleciones una opcion</option>
+              <option value="1">Ingieneria Agroindustrial</option>
+              <option value="2">Ingieneria de Software</option>
+              <option value="3">Ingieneria de Animación y Efectos Visuales</option>
+              <option value="4">Ingieneria en Energía</option>
+              <option value="5">Ingieneria en Logísteica y Transporte</option>
+              <option value="6">Ingieneria en Nanotecnología</option>
+              <option value="2">Ingieneria En Sistemas Automotrices</option>
+              <option value="2">Ingieneria en Tecnología Ambiental</option>
+              <option value="2">Ingieneria Financiera</option>
+              <option value="2">Ingieneria Mecatrónica</option>
+              <option value="2">Maestria en Ingienería</option>
+            </select>
+        </div>
+        </div>
+         <div class="col-12">
+          <div class="form-check">
+            <input type="checkbox" id="checkTerms" class="form-checkinput" >
+            <label for="checkTerms" class="form-checkinput text-white">Acepto los terminos y condiciones</label>
+          </div>
+         </div>
+         <div class="col-12">
+          <center><button type="submit" class="btn btn-primary">
+            Registrte
+          </button>
+          </center>
+         </div>
+      </form>
+    </div>
+  </body>
+</html>
