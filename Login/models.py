@@ -48,9 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.nombre
 
 
-
-
-
 class Alumno(User):
     matricula = models.CharField(max_length=10, unique=True,
                                  error_messages={'unique': 'Ya existe un usuario con esta matricula'})
@@ -58,23 +55,40 @@ class Alumno(User):
     cuatrimestre = models.CharField(max_length=3)
     numero_telefono = models.CharField(max_length=10)
     fecha_nacimiento = models.DateField()
+    direccion = models.CharField(max_length=100)
+    tipo_alumno = models.CharField(max_length=50)
+
+    ficha_medica = models.OneToOneField('Ficha_medica', on_delete=models.CASCADE, null=True, blank=True)
+    credencial = models.OneToOneField('Credencial', on_delete=models.CASCADE, null=True, blank=True)
+
+    solicitud = models.ManyToManyField('Solicitud', blank=True)
 
     def __str__(self) -> str:
         return self.nombre
 
 
+class Ficha_medica(models.Model):
+    tipo_sangre = models.CharField(max_length=3)
+    alergias = models.CharField(max_length=50)
+    enfermedades = models.CharField(max_length=50)
+    medicamentos = models.CharField(max_length=50)
+    fecha_ultima_visita = models.DateField(default=datetime.now)
+
+    def __str__(self) -> str:
+        return self.tipo_sangre
+
+
 class Credencial(models.Model):
-    alumno = models.OneToOneField(Alumno, on_delete=models.CASCADE)
     estado_credencial = models.CharField(max_length=10)
 
     def __str__(self) -> str:
         return self.estado_credencial
 
+
 class Solicitud(models.Model):
     tipo_solicitud = models.CharField(max_length=50)
     estado_solicitud = models.CharField(max_length=50)
     fecha_solicitud = models.DateField(default=datetime.now)
-    alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.tipo_solicitud

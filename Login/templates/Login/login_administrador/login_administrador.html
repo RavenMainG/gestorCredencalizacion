@@ -10,7 +10,7 @@
 <body class=" d-flex justify-content-center align-items-center vh-100">
   <div class="bg-white p-5 rounded-5 text-secondary" style="width: 25rem;">
     <div class="d-flex justify-content-center">
-      <img src="{% static 'img/login-icon.svg' %}" alt="login-icon" style="height: 7rem">
+      <img src="{% static 'Login/img/login-icon.svg' %}" alt="login-icon" style="height: 7rem">
     </div>
     <div class="text-center fs-1 fw-bold">Bienvenido</div>
       <form method="POST">
@@ -18,13 +18,13 @@
         {% csrf_token %}
         <div class="input-group mt-5">
           <div class="input-group-text bg-info">
-            <img src="{% static 'img/username-icon.svg' %}" alt="username.svg" style="height: 1rem;">
+            <img src="{% static 'Login/img/username-icon.svg' %}" alt="username.svg" style="height: 1rem;">
           </div>
         <input type="text" class="form-control" name="user" placeholder="Nombre de usuario">
         </div>
         <div class="input-group mt-5">
           <div class="input-group-text bg-info ">
-            <img src="{% static 'img/password-icon.svg' %}" alt="password.svg" style="height: 1rem;">
+            <img src="{% static 'Login/img/password-icon.svg' %}" alt="password.svg" style="height: 1rem;">
           </div>
           <input type="password" class="form-control" name="password" placeholder="Contraseña">
         </div>
