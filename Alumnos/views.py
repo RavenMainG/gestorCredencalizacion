@@ -21,30 +21,67 @@ def Solicitudes_Alumnos(request):
     credencial = alumno.credencial
     print(credencial)
 
-    if alumno.credencial == None:
+    if request.method == 'POST':
+        if alumno.solicitud.all().exists():
+            solicitud = Solicitud.objects.create(estado_solicitud='pendiente', tipo_solicitud='primera')
+            alumno.solicitud.add(solicitud)
+        else:
+            solicitud = Solicitud.objects.create(estado_solicitud='pendiente', tipo_solicitud='reposicion')
+            alumno.solicitud.add(solicitud)
 
-        print(alumno.solicitud.all())
-        requiere_credencial = True
+        alumno.save()
+
         context = {
             'title': 'Solicitudes de Alumnos',
             'mensaje': 'No tienes tu credencial aun, realiza una solicitud para poder obtenerla',
             'mensaje_solicitud': 'Se ha enviado tu solicitud, espera a que el administrador te la active',
-            'credencial': requiere_credencial
         }
-
-        credencial = Credencial.objects.create(estado_credencial='Inactiva')
-        alumno.credencial = credencial
-
-        solicitud = Solicitud.objects.create(tipo_solicitud='Primera credencial', estado_solicitud='Pendiente')
-        alumno.solicitud.add(solicitud)
-
-        alumno.save()
 
         return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
 
     else:
-        print(alumno.solicitud.all())
-        return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html')
+        if alumno.credencial.estado_credencial == 'Inactiva':
+
+            if not alumno.solicitud.all().exists():
+                context = {
+                    'title': 'Solicitud de alumnos',
+                    'mensaje': 'Tu credencial esta inactiva, realiza una solicitud para poder obtenerla',
+                    'tipo_solicitud': 'Primera credencial',
+                    'permite_solicitud': True
+                }
+
+                return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+            else:
+                if alumno.ultima_solicitud_pendiente():
+                    ultima_solicitud = alumno.obtener_ultima_solicitud()
+                    context = {
+                        'title': 'Solicitud de alumnos',
+                        'mensaje': 'Ya tienes una solicitud pendiente, espera a que la revise un administrador',
+                        'permite_solicitud': False,
+                        'solicitud': ultima_solicitud
+                    }
+                    return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+                else:
+                    context = {
+                        'title': 'Solicitud de alumnos',
+                        'mensaje': 'Tu credencial esta inactiva, realiza una solicitud para poder obtenerla',
+                        'tipo_solicitud': 'Reposicion',
+                        'permite_solicitud': True
+                    }
+
+                    return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+
+        else:
+
+            context = {
+                'title': 'Solicitud de alumnos',
+                'mensaje': 'No tienes tu credencial aun, realiza una solicitud para poder obtenerla',
+                'tipo_solicitud': 'Primera credencial',
+                'permite_solicitud': False
+            }
+            return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+
+
 
 
 @no_cache
@@ -151,6 +188,7 @@ def Panel_alumnos(request):
         'direccion_alumnos': alumno.direccion,
         'tipo_alumno_alumnos': alumno.tipo_alumno,
         'email_alumnos': alumno.email,
+        'estado_credencial': alumno.credencial.estado_credencial
     }
 
     return render(request, 'Alumnos/panel/panel_alumnos.html', context)

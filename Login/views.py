@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Alumno
+from .models import Alumno, Credencial
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
@@ -56,6 +56,8 @@ def registro_alumnos(request):
             return render(request, 'Login/registro_alumnos/registro_alumnos.html', context)
         else:
 
+            credencial = Credencial.objects.create(estado_credencial='Inactiva')
+
             nuevo_alumno = Alumno.objects.create_user(
                 email=datosAlumnos['email'],
                 password=datosAlumnos['password1'],
@@ -68,6 +70,7 @@ def registro_alumnos(request):
                 fecha_nacimiento=datosAlumnos['fecha_nacimiento'],
                 direccion=datosAlumnos['direccion'],
                 tipo_alumno=datosAlumnos['tipo_alumno'],
+                credencial=credencial
             )
             context = {
                 'mensaje': 'Usuario registrado correctamente'

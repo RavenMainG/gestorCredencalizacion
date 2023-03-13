@@ -63,6 +63,16 @@ class Alumno(User):
 
     solicitud = models.ManyToManyField('Solicitud', blank=True)
 
+    def ultima_solicitud_pendiente(self):
+        ultima_solicitud = self.solicitud.order_by('-fecha_solicitud').first()
+        if ultima_solicitud and ultima_solicitud.estado_solicitud == 'pendiente':
+            return True
+        return False
+
+    def obtener_ultima_solicitud(self):
+        ultima_solicitud = self.solicitud.order_by('-fecha_solicitud').first()
+        return ultima_solicitud
+
     def __str__(self) -> str:
         return self.nombre
 

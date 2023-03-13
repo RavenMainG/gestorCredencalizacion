@@ -12,7 +12,25 @@
                 <h2 class="text-black">{{ mensaje }}</h2>
             </div>
 
-            {% if credencial %}
+            {% if solicitud %}
+
+                <div class="card-text card d-flex align-items-center p-4">
+                    <h2 class="text-uppercase mb-5">Ultima solicitud</h2>
+                    <h2 class="text-black">Fecha: {{ solicitud.fecha_solicitud }}</h2>
+                    <h2 class="text-black">Estado solicitud: {{ solicitud.estado_solicitud }}</h2>
+                    <h2 class="text-black">Tipo solicitud: {{ solicitud.tipo_solicitud }}</h2>
+                </div>
+
+
+            {% endif %}
+
+            {% if mensaje_solicitud %}
+
+                <div class="alert alert-info">
+                    <h2 class="text-black">{{ mensaje_solicitud }}</h2>
+                </div>
+
+            {% elif permite_solicitud %}
                 <form method="post">
                     {% csrf_token %}
                     <h2 class="text-white">Solicitar credencial</h2>
