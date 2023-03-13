@@ -1,14 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Alumno
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
-def login_administradores(request):
-    return render(request, 'login_administradores/login_administradores.html')
-def login_alumnos(request):
-    return render(request, 'Login/login_alumno/login_alumno.html')
 
-def login_administradores(request):
-    return render(request, 'Login/login_administradores.html')
+def login_alumnos(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            context = {
+                'mensaje': 'Usuario logeado correctamente'
+            }
+
+            return redirect('panel_alumnos')
+        else:
+            context = {
+                'error': 'Usuario o contraseña incorrectos'
+            }
+            return render(request, 'Login/login_alumno/login_alumno.html', context)
+    else:
+        return render(request, 'Login/login_alumno/login_alumno.html')
+
+def logout_alumnos(request):
+    logout(request)
+    return redirect('home')
 
 def registro_alumnos(request):
 

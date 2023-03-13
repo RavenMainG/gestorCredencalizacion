@@ -1,51 +1,65 @@
-{% extends 'Login/templates/base.html' %}
-
 {% load static %}
 
-{% block banner %}
-    <div class="col-lg-4 d-flex">
-        <div class="container align-self-center px-5 content">
-            <h1 class="text-uppercase font-weight-bold mb-4">Solicita tu credencial ya&#33</h1>
-            <p class="lead-xl mb-4">Es de util importacia el tener tu credencial solicitada en caso de cualquier
-                cosa sera util&#33</p>
-            <a href="#" class="btn btn-primary">Solicitar ahora&#33</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'Login/img/img_login/icons8-cвdigo.gif' %}">
+    <title>Loing</title>
+</head>
+<body class=" d-flex justify-content-center align-items-center vh-100 bg-primary bg-black">
+<form method="post">
+
+    {% csrf_token %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
         </div>
-    </div>
+    {% elif mensaje%}
+        <div class="alert alert-success" role="alert">
+            {{ mensaje }}
+        </div>
+    {% endif %}
 
-{% endblock %}
-
-{% block content %}
-    <form class="bg-white p-5 rounded-5 text-secondary" style="width: 25rem;">
+    <div class="bg-white p-5 rounded-5 text-secondary" style="width: 25rem;">
         <div class="d-flex justify-content-center">
             <img src="{% static 'Login/img/img_login/login-icon.svg' %}" alt="login-icon" style="height: 7rem">
         </div>
-        <div class="text-center fs-1 fw-bold">bienvenido ALumno</div>
+        <div class="text-center fs-1 fw-bold">Bienvenido Alumno</div>
         <div class="input-group mt-5">
-            <div class="input-g roup-text bg-info">
-                <img src="{% static 'Login/img/img_login/username-icon.svg' %}" alt="username.svg" style="height: 1rem;">
+            <div class="input-group-text bg-info">
+                <img src="{% static 'Login/img/img_login/login-icon.svg' %}" alt="username.svg" style="height: 1rem;">
             </div>
-            <input type="text" class="form-control" name="usuario" placeholder="Nombre de usuario">
+            <input type="text" class="form-control" name="email" placeholder="Nombre de usuario">
         </div>
         <div class="input-group mt-5">
             <div class="input-group-text bg-info ">
-                <img src="{% static 'Login/img/img_login/password-icon.svg' %}" alt="password.svg" style="height: 1rem;">
+                <img src="{% static 'Login/img/img_login/password-icon.svg' %}" alt="password.svg"
+                     style="height: 1rem;">
             </div>
-            <input type="password" class="form-control" name="Contraseña" placeholder="Contraseña">
+            <input type="password" class="form-control" name="password" placeholder="Contraseña">
         </div>
         <div class="d-flex justify-content-around mt-2">
             <div class="d-flex align-items-center gap-1">
                 <input class="form-check-input" type="checkbox" name="">
-                <div style="font-size: 0.9rem" class="pt-1">remember mi</div>
+                <div style="font-size: 0.9rem" class="pt-1">Recuerdame</div>
             </div>
             <div class="pt-1">
-                <a href="#" class="text-decoration-none text-info fw-semibold fst-italic" style="font-size: 0.9rem;">Forgot
-                    your Password</a>
+                <a href="#" class="text-decoration-none text-info fw-semibold fst-italic" style="font-size: 0.9rem;">Recuperrar
+                    contraseña</a>
             </div>
         </div>
-        <div class="btn btn-info text-white w-100 mt-3">Login</div>
+        <button type="submit" class="btn btn-info text-white w-100 mt-3">Login</button>
         <div class="d-flex gap-1 justify-content-center mt-1">
-            <div>don't hava an acconut?</div>
-            <a href="{% url 'registro_alumnos' %}" class="text-decoration-none text-info fw-semibold">Registrarse</a>
+            <div>¿No tienes cueta?</div>
+            <a href="{% url 'registro_alumnos' %}" class="text-decoration-none text-info fw-semibold">Alumno</a>
+            {#      <a href="./formulario_P.html" class="text-decoration-none text-info fw-semibold">Personal</a>#}
         </div>
-    </form>
-{% endblock %}
+    </div>
+</form>
+
+</body>
+</html>

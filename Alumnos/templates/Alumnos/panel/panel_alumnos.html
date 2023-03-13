@@ -1,0 +1,26 @@
+{% extends 'Alumnos/layouts/base.html' %}
+
+{% load static %}
+{% block content %}
+    <div class="card tarjeta container">
+        <img src="{% static 'Alumnos/img/persona.jpg' %}" class="card-img-top rounded-circle imagen" alt="..."/>
+        <div class="card-body">
+            <h5>{{ nombre_alumnos }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Correo electrónico:<span class="font-weight-bold"> 223221@uptapachula.edu.mx
+            </li>
+            <li class="list-group-item">Matricula:<span class="font-weight-bold">{{ matricula_alumnos }}</span></li>
+            <li class="list-group-item">Teléfono:<span class="font-weight-bold">{{ numero_telefono_alumnos }}</span></li>
+            <li class="list-group-item">Dirección:<span class="font-weight-bold">{{ direccion_alumnos }}</span></li>
+            <li class="list-group-item">Fecha de Nacimiento:<span class="font-weight-bold">{{ fecha_nacimiento_alumnos }}</span></li>
+            <li class="list-group-item">Tipo de Alumno:<span class="font-weight-bold">{{ tipo_alumno_alumnos }}</span></li>
+            <li class="list-group-item">Ingieneria:<span class="font-weight-bold">{{ carrera_alumnos }}</span></li>
+{#            <li class="list-group-item">Grado y Grupo:<span class="font-weight-bold"> 2"A"</span></li>#}
+        </ul>
+        <div class="card-body">
+            <a href="#" class="card-link">Enlace</a>
+            <a href="#" class="card-link">Otro enlace</a>
+        </div>
+    </div>
+{% endblock %}

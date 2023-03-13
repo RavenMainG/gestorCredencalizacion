@@ -1,0 +1,87 @@
+{% extends 'Alumnos/layouts/base.html' %}
+
+{% load static %}
+{% block content %}
+    <main class="container">
+        <h2>{{ title }}</h2>
+
+        <form method="post" class="row g-3 mt-3 ">
+            <h1 class="display-5 text-primaty text-center text-white"><b>{{ title }}</b></h1>
+            {% csrf_token %}
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+
+            {% else %}
+                {% if mensaje %}
+                    <div class="alert alert-success" role="alert">
+                        {{ mensaje }}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <h2 class="text-white">Datos no actualizables</h2>
+
+            <div class="col-6">
+                <h2 class="text-white">Carrera: {{ carrera_alumnos }}</h2>
+            </div>
+
+            <div class="col-6">
+                <h2 class="text-white">Cuatrimestres: {{ cuatrimestre_alumnos }}</h2>
+            </div>
+
+            <div class="col-6">
+                <h2 class="text-white">Tipo de alumno: {{ tipo_alumno_alumnos }}</h2>
+            </div>
+
+            <div class="col-6">
+                <h2 class="text-white">Correo electronico: {{ email_alumnos }}</h2>
+            </div>
+
+
+            <h2 class="text-white mt-5">Datos actualizables</h2>
+            <div class="col-6">
+                <label for="inputName" class="form-labeñ text-white">Nombre &#58</label>
+                <input name="nombres" required type="text" class="form-control" id="inputName"
+                       value="{{ nombre_alumnos }}">
+            </div>
+            <div class="col-6">
+                <label for="inputLast" class="form-labeñ text-white">Apellidos &#58</label>
+                <input name="apellidos" required type="text" class="form-control" id="inputName"
+                       value="{{ apellido_alumnos }}">
+            </div>
+
+            <div class="col-6">
+                <label for="inputPerson" class="form-label text-white">Matricula &#58 </label>
+                <input name="matricula" required type="text" class="form-control" id="inputPerson"
+                       value="{{ matricula_alumnos }}">
+            </div>
+            <div class="col-6">
+                <label for="inputPhone" class="form-label text-white">Numero de telefono &#58</label>
+                <input name="numero_telefono" required type="number" class="form-control" id="inputPhone"
+                       value="{{ numero_telefono_alumnos }}">
+            </div>
+            <div class="col-12">
+                <label for="inputAdress" class="form-label text-white">Direccion &#58</label>
+                <input name="direccion" required type="text" class="form-control" id="inputAdress"
+                       value="{{ direccion_alumnos }}">
+            </div>
+            <div class="col-4">
+                <label for="dateInput" class="form-label text-white">Fecha nacimiento: {{ fecha_nacimiento_alumnos }}
+                    &#58</label>
+                <input name="fecha_nacimiento" required type="date" class="form-control" id="dateInput">
+            </div>
+
+
+            <div class="col-12">
+                <center>
+                    <button type="submit" class="btn btn-primary">
+                        Actualizar datos
+                    </button>
+                    <a href="{% url 'cambiar_password' %}" class="ms-5 text-white">Actualizar contrasena</a>
+                </center>
+            </div>
+        </form>
+    </main>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'Alumnos/layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <main class="container">
+        <h1 class="text-white mb-5">{{ title }}</h1>
+
+        {% if mensaje %}
+            <div class="alert alert-info">
+                <h2 class="text-black">{{ mensaje }}</h2>
+            </div>
+
+            {% if credencial %}
+                <form method="post">
+                    {% csrf_token %}
+                    <h2 class="text-white">Solicitar credencial</h2>
+                    <div class="col-12">
+                        <center>
+                            <button type="submit" class="btn btn-primary">
+                                Soliciar credencial
+                            </button>
+                        </center>
+                    </div>
+                </form>
+
+            {% endif %}
+
+        {% endif %}
+
+    </main>
+
+{% endblock %}
