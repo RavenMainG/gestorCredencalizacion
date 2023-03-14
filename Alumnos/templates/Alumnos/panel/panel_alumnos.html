@@ -4,7 +4,7 @@
 {% block content %}
     <div class="card tarjeta container">
         <img src="{% static 'Alumnos/img/persona.jpg' %}" class="card-img-top rounded-circle imagen" alt="..."/>
-        <div class="card-body">
+        <div class="card-body p-5">
             <h5>{{ nombre_alumnos }}</h5>
         </div>
         <ul class="list-group list-group-flush">
@@ -18,9 +18,5 @@
             <li class="list-group-item">Ingieneria:<span class="font-weight-bold">{{ carrera_alumnos }}</span></li>
             <li class="list-group-item">Estado de la credencial:<span class="font-weight-bold"> {{ estado_credencial }}</span></li>
         </ul>
-        <div class="card-body">
-            <a href="#" class="card-link">Enlace</a>
-            <a href="#" class="card-link">Otro enlace</a>
-        </div>
     </div>
 {% endblock %}

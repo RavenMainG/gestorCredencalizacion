@@ -22,7 +22,7 @@ def Solicitudes_Alumnos(request):
     print(credencial)
 
     if request.method == 'POST':
-        if alumno.solicitud.all().exists():
+        if not alumno.solicitud.all().exists():
             solicitud = Solicitud.objects.create(estado_solicitud='pendiente', tipo_solicitud='primera')
             alumno.solicitud.add(solicitud)
         else:
@@ -42,7 +42,9 @@ def Solicitudes_Alumnos(request):
     else:
         if alumno.credencial.estado_credencial == 'Inactiva':
 
-            if not alumno.solicitud.all().exists():
+            print(alumno.solicitud.all().exists())
+            if alumno.solicitud.all().exists() == False:
+                print('dentro del if')  # no entra
                 context = {
                     'title': 'Solicitud de alumnos',
                     'mensaje': 'Tu credencial esta inactiva, realiza una solicitud para poder obtenerla',
@@ -73,6 +75,7 @@ def Solicitudes_Alumnos(request):
 
         else:
 
+            print(alumno.solicitud.all().exists())
             context = {
                 'title': 'Solicitud de alumnos',
                 'mensaje': 'No tienes tu credencial aun, realiza una solicitud para poder obtenerla',

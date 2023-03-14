@@ -6,15 +6,17 @@
     <title>Mi sitio web</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="icon" href="{% static 'Login/img/img_login/icons8-cвdigo.gif' %}">
+    <link rel="icon" href="img/icons8-código.gif">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'Alumnos/bootstrap/css/bootstrap.min.css' %}"/>
+    <!-- Agrega los archivos CSS de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{% static 'Alumnos/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'Alumnos/styles/styles.css' %}">
 </head>
 <body>
-<section class="">
-    <div class="row no-gutters div1">
+<section>
+    <div class="row no-gutters">
         <div class="col-lg-1 border-right d-none d-lg-block">
             <div class="d-flex h-100">
                 <div class="align-self-center mx-auto">
@@ -22,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-11 nav">
+        <div class="col-lg-11">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand text-light">Universidad Politecnica<span class="font-weight-bold"> de Tapachula</span></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -38,26 +40,27 @@
                         <li class="nav-item">
                             <a href="{% url 'perfil_alumno' %}" class="nav-link text-light lead">Perfil</a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{% url 'panel_solicitudes' %}" class="nav-link text-light lead">Solicitudes</a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{% url 'logout_alumnos' %}" class="nav-link text-light lead">Salir</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-light lead">#</a>
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
     </div>
-
     {% block content %}
 
     {% endblock %}
 </section>
-
+<!-- Agrega los archivos JS de Bootstrap -->
 <script src="{% static 'Alumnos/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
