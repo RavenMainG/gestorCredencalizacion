@@ -63,6 +63,9 @@ class Alumno(User):
 
     solicitud = models.ManyToManyField('Solicitud', blank=True)
 
+    imagen = models.ImageField(upload_to='imagenes/')
+
+
     def ultima_solicitud_pendiente(self):
         ultima_solicitud = self.solicitud.order_by('-fecha_solicitud').first()
         if ultima_solicitud and ultima_solicitud.estado_solicitud == 'pendiente':

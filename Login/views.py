@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Alumno, Credencial
 from django.contrib.auth import authenticate, login, logout
+import os
 # Create your views here.
 
 
@@ -44,7 +45,10 @@ def registro_alumnos(request):
             'fecha_nacimiento': request.POST['fecha_nacimiento'],
             'direccion': request.POST['direccion'],
             'tipo_alumno': request.POST['tipo_alumno'],
+            'imagen': request.FILES['foto']
         }
+        ruta_imagen = os.path.join('imagenes/', datosAlumnos['imagen'].name)
+
 
         print(datosAlumnos)
 
@@ -58,6 +62,8 @@ def registro_alumnos(request):
 
             credencial = Credencial.objects.create(estado_credencial='Inactiva')
 
+
+
             nuevo_alumno = Alumno.objects.create_user(
                 email=datosAlumnos['email'],
                 password=datosAlumnos['password1'],
@@ -70,8 +76,13 @@ def registro_alumnos(request):
                 fecha_nacimiento=datosAlumnos['fecha_nacimiento'],
                 direccion=datosAlumnos['direccion'],
                 tipo_alumno=datosAlumnos['tipo_alumno'],
+                imagen=ruta_imagen,
                 credencial=credencial
             )
+
+            with open(ruta_imagen, 'wb+') as destino:
+                for chunk in datosAlumnos['imagen'].chunks():
+                    destino.write(chunk)
             context = {
                 'mensaje': 'Usuario registrado correctamente'
             }
