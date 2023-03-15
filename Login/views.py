@@ -45,9 +45,8 @@ def registro_alumnos(request):
             'fecha_nacimiento': request.POST['fecha_nacimiento'],
             'direccion': request.POST['direccion'],
             'tipo_alumno': request.POST['tipo_alumno'],
-            'imagen': request.FILES['foto']
+            'imagen': request.FILES.get('imagen')
         }
-        ruta_imagen = os.path.join('imagenes/', datosAlumnos['imagen'].name)
 
 
         print(datosAlumnos)
@@ -76,13 +75,11 @@ def registro_alumnos(request):
                 fecha_nacimiento=datosAlumnos['fecha_nacimiento'],
                 direccion=datosAlumnos['direccion'],
                 tipo_alumno=datosAlumnos['tipo_alumno'],
-                imagen=ruta_imagen,
+                imagen=datosAlumnos['imagen'],
                 credencial=credencial
             )
 
-            with open(ruta_imagen, 'wb+') as destino:
-                for chunk in datosAlumnos['imagen'].chunks():
-                    destino.write(chunk)
+
             context = {
                 'mensaje': 'Usuario registrado correctamente'
             }

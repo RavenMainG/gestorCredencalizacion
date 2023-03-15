@@ -178,7 +178,9 @@ def Perfil_alumnos(request):
 @login_required
 def Panel_alumnos(request):
     alumno = Alumno.objects.get(email=request.user.email)
-
+    url = alumno.imagen.url
+    nueva_url = url.split('/')
+    url = nueva_url[nueva_url.__len__() -2] + "/" + nueva_url[nueva_url.__len__() - 1]
     context = {
         'title': 'Panel de Alumnos',
         'nombre_alumnos': alumno.nombre,
@@ -191,7 +193,11 @@ def Panel_alumnos(request):
         'direccion_alumnos': alumno.direccion,
         'tipo_alumno_alumnos': alumno.tipo_alumno,
         'email_alumnos': alumno.email,
-        'estado_credencial': alumno.credencial.estado_credencial
+        'estado_credencial': alumno.credencial.estado_credencial,
+        'imagen': url
     }
+
+
+    print(url)
 
     return render(request, 'Alumnos/panel/panel_alumnos.html', context)

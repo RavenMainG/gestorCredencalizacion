@@ -3,13 +3,12 @@
 {% load static %}
 {% block content %}
     <div class="card tarjeta container">
-        <img src="{% static 'Alumnos/img/persona.jpg' %}" class="card-img-top rounded-circle imagen" alt="..."/>
+        <img src="{% static imagen %}" class="card-img-top rounded-circle imagen" alt="..."/>
         <div class="card-body p-5">
             <h5>{{ nombre_alumnos }}</h5>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Correo electrónico:<span class="font-weight-bold"> 223221@uptapachula.edu.mx
-            </li>
+            <li class="list-group-item">Correo electrónico:<span class="font-weight-bold"> 223221@uptapachula.edu.mx</li>
             <li class="list-group-item">Matricula:<span class="font-weight-bold">{{ matricula_alumnos }}</span></li>
             <li class="list-group-item">Teléfono:<span class="font-weight-bold">{{ numero_telefono_alumnos }}</span></li>
             <li class="list-group-item">Dirección:<span class="font-weight-bold">{{ direccion_alumnos }}</span></li>

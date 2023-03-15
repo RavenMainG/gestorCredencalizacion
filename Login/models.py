@@ -63,7 +63,7 @@ class Alumno(User):
 
     solicitud = models.ManyToManyField('Solicitud', blank=True)
 
-    imagen = models.ImageField(upload_to='imagenes/')
+    imagen = models.ImageField(upload_to='Login/static/imagenes/')
 
 
     def ultima_solicitud_pendiente(self):

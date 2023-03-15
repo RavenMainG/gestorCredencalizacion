@@ -19,7 +19,7 @@
         </div>
     </div>
 </div>
-<form method="post" class="row g-3 mt-3 ">
+<form method="post" class="row g-3 mt-3 " enctype="multipart/form-data">
 
     {% csrf_token %}
     {% if error %}
@@ -132,7 +132,7 @@
 
     <div class="mb-3">
         <label for="foto" class="form-label">Foto personal:</label>
-        <input class="form-control" type="file" id="foto" name="foto">
+        <input class="form-control" type="file" id="imagen" name="imagen">
     </div>
 
     <div class="col-12">
