@@ -19,7 +19,7 @@ urlpatterns = [
     path('panel_alumnos/', alumnos_views.Panel_alumnos, name='panel_alumnos'),
     path('perfil_alumno/', alumnos_views.Perfil_alumnos, name='perfil_alumno'),
     path('cambiar_password/', alumnos_views.Cambiar_password, name='cambiar_password'),
-    path('panel_solicitudes/', alumnos_views.Solicitudes_Alumnos, name='panel_solicitudes'),
+    path('panel_solicitudes_alumnos/', alumnos_views.Solicitudes_Alumnos, name='panel_solicitudes'),
 
     path('ficha_medica/', alumnos_views.Ficha_medica, name='ficha_medica'),
 
