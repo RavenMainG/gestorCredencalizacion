@@ -165,7 +165,7 @@ def Qr(request, matricula):
 
     alumno = Alumno.objects.get(matricula=matricula)
 
-    url = f'http://127.0.0.1:8000/panel_alumnos/ruta_qr_alumno/{alumno.matricula}'
+    url = f'https://gestorcredencializacion.onrender.com/panel_alumnos/ruta_qr_alumno/{alumno.matricula}'
 
     # ruta_imagen = os.path.join()
     BASE_DIR = Path(__file__).resolve().parent.parent
