@@ -1,11 +1,27 @@
 from django.shortcuts import render, redirect
 from .models import Alumno, Credencial
 from django.contrib.auth import authenticate, login, logout
+
+from pathlib import Path
+
+from .forms import RegistrarAdministrador
+
+from PIL import Image
+
 import os
-# Create your views here.
+
+import qrcode
+from django.http.response import HttpResponse
 
 
 def login_alumnos(request):
+
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('panel_solicitudes_administrador')
+        else:
+            return redirect('panel_alumnos')
+
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -29,9 +45,22 @@ def logout_alumnos(request):
     logout(request)
     return redirect('home')
 
+
+def modificacion_fecha(fecha):
+    fecha_separada = fecha
+
 def registro_alumnos(request):
 
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('panel_solicitudes_administrador')
+        else:
+            return redirect('panel_alumnos')
+
     if request.method == 'POST':
+        print(request.POST['fecha_nacimiento'])
+        fecha = request.POST['fecha_nacimiento']
+
         datosAlumnos = {
             'nombres': request.POST['nombres'],
             'apellidos': request.POST['apellidos'],
@@ -59,10 +88,6 @@ def registro_alumnos(request):
             return render(request, 'Login/registro_alumnos/registro_alumnos.html', context)
         else:
 
-            credencial = Credencial.objects.create(estado_credencial='Inactiva')
-
-
-
             nuevo_alumno = Alumno.objects.create_user(
                 email=datosAlumnos['email'],
                 password=datosAlumnos['password1'],
@@ -76,9 +101,10 @@ def registro_alumnos(request):
                 direccion=datosAlumnos['direccion'],
                 tipo_alumno=datosAlumnos['tipo_alumno'],
                 imagen=datosAlumnos['imagen'],
-                credencial=credencial
             )
 
+            alumnos = Alumno.objects.get(email=datosAlumnos['email'])
+            alumnos.crear_credencial_alumno()
 
             context = {
                 'mensaje': 'Usuario registrado correctamente'
@@ -87,3 +113,90 @@ def registro_alumnos(request):
 
     else:
         return render(request, 'Login/registro_alumnos/registro_alumnos.html')
+
+def registra_admin(request):
+    formAdmin = RegistrarAdministrador()
+
+    if request.method == 'POST':
+        formAdmin = RegistrarAdministrador(request.POST)
+        if formAdmin.is_valid():
+            formAdmin.save()
+            return redirect('home')
+        else:
+            context = {
+                'error': 'Error al registrar'
+            }
+            return render(request, 'Login/registro_admin/registro_admin.html', context)
+    else:
+        context = {
+            'formAdmin': formAdmin
+        }
+        return render(request, 'Login/registro_admin/registro_admin.html', context)
+        
+
+def Login_admin(request):
+
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('panel_solicitudes_administrador')
+        else:
+            return redirect('panel_alumnos')
+
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            context = {
+                'mensaje': 'Usuario logeado correctamente'
+            }
+
+            return redirect('panel_solicitudes_administrador')
+        else:
+            context = {
+                'error': 'Usuario o contraseña incorrectos'
+            }
+            return render(request, 'Login/login_administrador/login_administrador.html', context)
+    else:
+        return render(request, 'Login/login_administrador/login_administrador.html')
+
+def Qr(request, matricula):
+
+    alumno = Alumno.objects.get(matricula=matricula)
+
+    url = f'http://127.0.0.1:8000/panel_alumnos/ruta_qr_alumno/{alumno.matricula}'
+
+    # ruta_imagen = os.path.join()
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    print(f"ruta: {BASE_DIR}")
+
+    logo_ruta = os.path.join(BASE_DIR, 'static/imagenes/LogoUPTap.png')
+
+    logo = Image.open(logo_ruta)
+
+    basewidth = 100
+
+    wpercent = (basewidth / float(logo.size[0]))
+    hsize = int((float(logo.size[1]) * float(wpercent)))
+    logo = logo.resize((basewidth, hsize), Image.ANTIALIAS)
+    QRcode = qrcode.QRCode(
+        error_correction=qrcode.constants.ERROR_CORRECT_H
+    )
+    QRcode.add_data(url)
+
+    QRcode.make()
+    QRcolor = 'Black'
+
+    QRimg = QRcode.make_image(
+        fill_color=QRcolor, back_color="white").convert('RGB')
+
+    pos = ((QRimg.size[0] - logo.size[0]) // 2,
+           (QRimg.size[1] - logo.size[1]) // 2)
+    QRimg.paste(logo, pos)
+
+    response = HttpResponse(content_type="image/png")
+    QRimg.save(response, "PNG")
+    return response
+

@@ -1,8 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 
+from django.http.response import HttpResponse
+
+from reportlab.pdfgen import canvas
+
+
 from Login.models import Alumno, Credencial, Solicitud
+
+import qrcode
 
 
 def no_cache(view_func):
@@ -13,83 +20,80 @@ def no_cache(view_func):
 
     return wrapped_view
 
+
+
+
 @no_cache
 @login_required
 def Solicitudes_Alumnos(request):
 
+    if request.user.is_superuser:
+        return redirect('panel_solicitudes_administrador')
+
     alumno = Alumno.objects.get(email=request.user.email)
-    credencial = alumno.credencial
-    print(credencial)
 
     if request.method == 'POST':
-        if not alumno.solicitud.all().exists():
-            solicitud = Solicitud.objects.create(estado_solicitud='pendiente', tipo_solicitud='primera')
-            alumno.solicitud.add(solicitud)
-        else:
-            solicitud = Solicitud.objects.create(estado_solicitud='pendiente', tipo_solicitud='reposicion')
-            alumno.solicitud.add(solicitud)
-
-        alumno.save()
-
+        alumno.crear_solicitud()
         context = {
-            'title': 'Solicitudes de Alumnos',
-            'mensaje': 'No tienes tu credencial aun, realiza una solicitud para poder obtenerla',
-            'mensaje_solicitud': 'Se ha enviado tu solicitud, espera a que el administrador te la active',
+            'title': 'Solicitud de alumnos',
+            'mensaje': 'Tu solicitud ya fue enviada, espera a que un administrador la revise',
+            'permite_solicitud': False,
+            'solicitud': alumno.obtener_solicitud()
         }
-
         return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
 
     else:
-        if alumno.credencial.estado_credencial == 'Inactiva':
-
-            print(alumno.solicitud.all().exists())
-            if alumno.solicitud.all().exists() == False:
-                print('dentro del if')  # no entra
-                context = {
-                    'title': 'Solicitud de alumnos',
-                    'mensaje': 'Tu credencial esta inactiva, realiza una solicitud para poder obtenerla',
-                    'tipo_solicitud': 'Primera credencial',
-                    'permite_solicitud': True
-                }
-
-                return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
-            else:
-                if alumno.ultima_solicitud_pendiente():
-                    ultima_solicitud = alumno.obtener_ultima_solicitud()
+        if alumno.ficha_medica_existe() == False or alumno.contacto_emergencia_existe() == False:
+            context = {
+                'title': 'Solicitud de alumnos',
+                'mensaje': 'No puedes enviar una solicitud, primero debes llenar tus de emergencia y ficha medica',
+                'permite_solicitud': False,
+                'solicitud': alumno.obtener_solicitud()
+            }
+            return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+        else:
+            if alumno.estado_credencial() == 'Inactiva':
+                if alumno.estado_solicitud() == 'Rechazada':
                     context = {
                         'title': 'Solicitud de alumnos',
-                        'mensaje': 'Ya tienes una solicitud pendiente, espera a que la revise un administrador',
+                        'mensaje': 'Tu credencial esta inactiva y tu solicitud fue rechazada, puedes volver a enviar una solicitud',
+                        'permite_solicitud': True,
+                        'solicitud': alumno.obtener_solicitud()
+                    }
+                    return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
+                elif alumno.estado_solicitud() == 'Pendiente':
+                    context = {
+                        'title': 'Solicitud de alumnos',
+                        'mensaje': 'Tu credencial esta inactiva y tu solicitud esta pendiente, espera a que un administrador la revise',
                         'permite_solicitud': False,
-                        'solicitud': ultima_solicitud
+                        'solicitud': alumno.obtener_solicitud()
                     }
                     return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
                 else:
                     context = {
                         'title': 'Solicitud de alumnos',
-                        'mensaje': 'Tu credencial esta inactiva, realiza una solicitud para poder obtenerla',
-                        'tipo_solicitud': 'Reposicion',
-                        'permite_solicitud': True
+                        'mensaje': 'Tu credencial esta inactiva y puedes enviar una solicitud',
+                        'permite_solicitud': True,
+                        'solicitud': alumno.obtener_solicitud()
                     }
-
                     return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
 
-        else:
-
-            print(alumno.solicitud.all().exists())
-            context = {
-                'title': 'Solicitud de alumnos',
-                'mensaje': 'No tienes tu credencial aun, realiza una solicitud para poder obtenerla',
-                'tipo_solicitud': 'Primera credencial',
-                'permite_solicitud': False
-            }
-            return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
-
-
+            else:
+                context = {
+                    'title': 'Solicitud de alumnos',
+                    'mensaje': 'Tu credencial esta activa',
+                    'permite_solicitud': False,
+                    'solicitud': alumno.obtener_solicitud()
+                }
+                return render(request, 'Alumnos/solicitudes/solicitudes_alunno.html', context)
 
 
 @no_cache
 @login_required
 def Cambiar_password(request):
+
+    if request.user.is_superuser:
+        return redirect('panel_solicitudes_administrador')
 
     if request.method == 'POST':
 
@@ -129,6 +133,10 @@ def Cambiar_password(request):
 @no_cache
 @login_required
 def Perfil_alumnos(request):
+
+    if request.user.is_superuser:
+        return redirect('panel_solicitudes_administrador')
+
     if request.method == 'POST':
         alumno = Alumno.objects.get(email=request.user.email)
 
@@ -177,10 +185,16 @@ def Perfil_alumnos(request):
 @no_cache
 @login_required
 def Panel_alumnos(request):
+
+    if request.user.is_superuser:
+        return redirect('panel_solicitudes_administrador')
+
     alumno = Alumno.objects.get(email=request.user.email)
+
     url = alumno.imagen.url
     nueva_url = url.split('/')
-    url = nueva_url[nueva_url.__len__() -2] + "/" + nueva_url[nueva_url.__len__() - 1]
+    url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
+
     context = {
         'title': 'Panel de Alumnos',
         'nombre_alumnos': alumno.nombre,
@@ -194,10 +208,106 @@ def Panel_alumnos(request):
         'tipo_alumno_alumnos': alumno.tipo_alumno,
         'email_alumnos': alumno.email,
         'estado_credencial': alumno.credencial.estado_credencial,
-        'imagen': url
+        'imagen': url,
     }
-
 
     print(url)
 
     return render(request, 'Alumnos/panel/panel_alumnos.html', context)
+
+@no_cache
+@login_required
+def Ficha_medica(request):
+
+    if request.user.is_superuser:
+        return redirect('panel_solicitudes_administrador')
+
+    alumno = Alumno.objects.get(email=request.user.email)
+    if request.method == 'POST':
+
+        alumno.crear_ficha_medica(request.POST['tipo_sangre'], request.POST['alergias'], request.POST['enfermedades'],
+                                  request.POST['medicamentos'])
+        alumno.crear_contacto_emergencia(request.POST['nombre_contacto'], request.POST['telefono_emergencia'],
+                                         request.POST['parentesco_emergencia'])
+
+        context = {
+            'title': 'Ficha medica',
+            'mensaje': 'Se ha guardado tu ficha medica'
+        }
+        return render(request, 'Alumnos/ficha_medica/ficha_medica.html', context)
+
+    else:
+
+        if alumno.ficha_medica_existe() and alumno.contacto_emergencia_existe():
+
+            context = {
+                'title': 'Ficha medica',
+                'tipo_sangre': alumno.ficha_medica.tipo_sangre,
+                'alergias': alumno.ficha_medica.alergias,
+                'enfermedades': alumno.ficha_medica.enfermedades,
+                'medicamentos': alumno.ficha_medica.medicamentos,
+                'nombre_contacto': alumno.contacto_emergencia.nombre,
+                'telefono_emergencia': alumno.contacto_emergencia.numero_telefono,
+                'parentesco_emergencia': alumno.contacto_emergencia.parentesco,
+
+            }
+        else:
+            context = {
+                'title': 'Ficha medica',
+            }
+
+        return render(request, 'Alumnos/ficha_medica/ficha_medica.html', context)
+
+
+def Ruta_qr_alumno(request, matricula):
+    alumno = Alumno.objects.get(matricula=matricula)
+
+    print(alumno.nombre)
+    contex = {
+        'nombre': alumno.nombre,
+        'apellidos': alumno.apellido,
+        'matricula': alumno.matricula,
+        'correo': alumno.email,
+        # Datos de emergencia y contacto
+
+        'Alergias': alumno.ficha_medica.alergias,
+        'tipo_sangre': alumno.ficha_medica.tipo_sangre,
+        'enfermedades': alumno.ficha_medica.enfermedades,
+        'medicamentos': alumno.ficha_medica.medicamentos,
+
+        'nombre_contacto_emergencia': alumno.contacto_emergencia.nombre,
+        'numero_contacto_emergencia': alumno.contacto_emergencia.numero_telefono,
+
+    }
+
+    return render(request, 'Alumnos/pagina_qr_alumno/pagina_qr_alumno.html', contex)
+
+def Generar_credencial_pdf(request, matricula):
+    # Obtener los datos del modelo
+    datos = Alumno.objects.get(matricula=matricula)
+
+
+    # Crear un objeto para el PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
+    p = canvas.Canvas(response)
+
+    # Escribir los datos en el PDF
+    for dato in datos:
+        p.drawString(100, 100, str(dato))
+
+    # Cerrar el objeto del PDF y devolverlo
+    p.showPage()
+    p.save()
+    return response
+
+def Credencial_pdf(request):
+    alumno = Alumno.objects.get(email=request.user.email)
+    url = alumno.imagen.url
+    nueva_url = url.split('/')
+    url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
+    context = {
+        'alumno': alumno,
+        'imagen': url,
+    }
+    return render(request, 'Alumnos/credencial/credencial.html', context)

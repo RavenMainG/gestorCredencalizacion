@@ -1,0 +1,44 @@
+{% extends 'Administradores/layouts/base.html' %}
+
+{% block content %}
+<div class="container my-4">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="datatable_solicitudes" class="table table-striped">
+                        <caption class="text-white">
+                            Solicitudes pendientes
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th class="centered text-white">#</th>
+                                <th class="centered text-white">Nombre</th>
+                                <th class="centered text-white">Email</th>
+                                <th class="centered text-white">Motivo</th>
+                                <th class="centered text-white">Fecha de solicitud</th>
+                                <th class="centered text-white">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody_solicitudes">
+                            {% for solicitud in solicitudes %}
+                            <tr>
+                                <td class="text-white">{{ solicitud.solicitud.id }}</td>
+                                <td class="text-white">{{ solicitud.nombre }}</td>
+                                <td class="text-white">{{ solicitud.email }}</td>
+                                <td class="text-white">{{ solicitud.solicitud.tipo_solicitud }}</td>
+                                <td class="text-white">{{ solicitud.solicitud.fecha_solicitud }}</td>
+                                <td>
+                                    <a href="{% url 'aceptar_solicitud' matricula=solicitud.matricula %}" class="btn btn-success"><i class="fas fa-check"></i> Aprobar</a>
+                                    <a href="{% url 'rechazar_matricula' matricula=solicitud.matricula %}" class="btn btn-danger"><i class="fas fa-times"></i> Rechazar</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="text-white" colspan="6">No hay solicitudes pendientes.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}

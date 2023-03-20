@@ -1,0 +1,55 @@
+{% extends 'Administradores/layouts/base.html' %}
+
+{% block content %}
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="datatable_alumnos" class="table table-striped">
+                    <caption class="text-white">
+                        Listado de alumnos
+                    </caption>
+                    <thead>
+                    <tr>
+                        <th class="centered text-white"># Matrícula</th>
+                        <th class="centered text-white">Nombre</th>
+                        <th class="centered text-white">Email</th>
+                        <th class="centered text-white">Credencial</th>
+                        <th class="centered text-white">Opciones</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="tableBody_alumnos">
+
+                    {% for alumno in alumnos %}
+                        <tr>
+                            <td class="text-white">{{ alumno.matricula }}</td>
+                            <td class="text-white">{{ alumno.nombre }}</td>
+                            <td class="text-white">{{ alumno.email }}</td>
+                            <td class="text-white">{{ alumno.estado_credencial }}</td>
+                            <td class="">
+
+                                <a href="{% url 'detalle_alumno' matricula=alumno.matricula %}" class="btn btn-primary"><i
+                                        class="fas fa-eye"></i> Ver detalles</a>
+                                {% if alumno.credencial.estado_credencial == 'Activa' %}
+                                    <a href="{% url 'desactivar_credencial' matricula=alumno.matricula %}"
+                                       class="btn btn-success"><i class="fas fa-edit"></i>Desactivar creencial</a>
+
+                                {% endif %}
+                                <a href="{% url 'eliminar_alumno' matricula=alumno.matricula %}" class="btn btn-danger"><i class="fas fa-trash"></i> Eliminar</a>
+
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="text-white" colspan="4">No hay alumnos registrados.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

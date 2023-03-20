@@ -57,35 +57,201 @@ class Alumno(User):
     fecha_nacimiento = models.DateField()
     direccion = models.CharField(max_length=100)
     tipo_alumno = models.CharField(max_length=50)
-
-    ficha_medica = models.OneToOneField('Ficha_medica', on_delete=models.CASCADE, null=True, blank=True)
-    credencial = models.OneToOneField('Credencial', on_delete=models.CASCADE, null=True, blank=True)
-
-    solicitud = models.ManyToManyField('Solicitud', blank=True)
-
     imagen = models.ImageField(upload_to='Login/static/imagenes/')
 
+    ficha_medica = models.OneToOneField('Ficha_medica', on_delete=models.CASCADE, null=True, blank=True)
+    contacto_emergencia = models.OneToOneField('Contacto_emergencia', on_delete=models.CASCADE, null=True, blank=True)
 
-    def ultima_solicitud_pendiente(self):
-        ultima_solicitud = self.solicitud.order_by('-fecha_solicitud').first()
-        if ultima_solicitud and ultima_solicitud.estado_solicitud == 'pendiente':
+    credencial = models.OneToOneField('Credencial', on_delete=models.CASCADE, null=True, blank=True)
+
+    solicitud = models.OneToOneField('Solicitud', on_delete=models.CASCADE, null=True, blank=True, related_name='solicitud')
+
+
+    # ACTUALIZACIONES DE DATOS
+    def actualizar_datos_ficha_medica(self, tipo_sangre, alergias, enfermedades, medicamentos):
+        if tipo_sangre:
+            self.ficha_medica.tipo_sangre = tipo_sangre
+        elif alergias:
+            self.ficha_medica.alergias = alergias
+        elif enfermedades:
+            self.ficha_medica.enfermedades = enfermedades
+        elif medicamentos:
+            self.ficha_medica.medicamentos = medicamentos
+        self.ficha_medica.save()
+
+    def actualizar_datos_contacto_emergencia(self, nombre, apellido, numero_telefono, parentesco):
+        if nombre:
+            self.contacto_emergencia.nombre = nombre
+        elif apellido:
+            self.contacto_emergencia.apellido = apellido
+        elif numero_telefono:
+            self.contacto_emergencia.numero_telefono = numero_telefono
+        elif parentesco:
+            self.contacto_emergencia.parentesco = parentesco
+        self.contacto_emergencia.save()
+
+
+
+    def crear_contacto_emergencia(self, nombre, numero_telefono, parentesco):
+        if self.contacto_emergencia:
+            self.contacto_emergencia.nombre = nombre
+            self.contacto_emergencia.numero_telefono = numero_telefono
+            self.contacto_emergencia.parentesco = parentesco
+            self.contacto_emergencia.save()
+
+        else:
+            contacto_emergencia = Contacto_emergencia.objects.create(
+                nombre=nombre,
+                numero_telefono=numero_telefono,
+                parentesco=parentesco,
+            )
+            self.contacto_emergencia = contacto_emergencia
+            self.save()
+
+    def ficha_medica_existe(self):
+        if self.ficha_medica:
             return True
-        return False
+        else:
+            return False
 
-    def obtener_ultima_solicitud(self):
-        ultima_solicitud = self.solicitud.order_by('-fecha_solicitud').first()
-        return ultima_solicitud
+    def contacto_emergencia_existe(self):
+        if self.contacto_emergencia:
+            return True
+        else:
+            return False
+    def crear_ficha_medica(self, tipo_sangre, alergias, enfermedades, medicamentos):
+        if self.ficha_medica_existe():
+
+            self.ficha_medica.tipo_sangre = tipo_sangre
+            self.ficha_medica.alergias = alergias
+            self.ficha_medica.enfermedades = enfermedades
+            self.ficha_medica.medicamentos = medicamentos
+            self.ficha_medica.save()
+
+        else:
+            ficha_medica = Ficha_medica.objects.create(
+                tipo_sangre=tipo_sangre,
+                alergias=alergias,
+                enfermedades=enfermedades,
+                medicamentos=medicamentos,
+            )
+            self.ficha_medica = ficha_medica
+            self.save()
+
+    def estado_credencial(self):
+        if self.credencial:
+            return self.credencial.estado_credencial
+        else:
+            return None
+
+    def obtener_solicitud(self):
+        if self.solicitud:
+            return self.solicitud
+        else:
+            return None
+
+
+    def solicitud_existe(self):
+        if self.solicitud:
+            return True
+        else:
+            return False
+
+    def crear_solicitud(self):
+        if self.solicitud_existe():
+            print('Ya existe una solicitud')
+            self.solicitud.estado_solicitud = 'Pendiente'
+            self.solicitud.fecha_solicitud = datetime.now()
+            self.solicitud.tipo_solicitud = 'Reposicion'
+            self.solicitud.save()
+        else:
+            solicitud = Solicitud.objects.create(
+                tipo_solicitud='Primera',
+                estado_solicitud='Pendiente',
+                fecha_solicitud=datetime.now(),
+            )
+            self.solicitud = solicitud
+            self.save()
+
+    def detalle_solicitud(self):
+        if self.solicitud:
+            return self.solicitud.estado_solicitud
+        else:
+            return None
+
+
+    def estado_solicitud(self):
+        if self.solicitud:
+            return self.solicitud.estado_solicitud
+        else:
+            return None
+
+    def aceptar_solicitud(self):
+        self.solicitud.estado_solicitud = 'Aceptada'
+        self.solicitud.save()
+        solicitud_historial = Historial_solicitud.objects.create(
+            tipo_solicitud=self.solicitud.tipo_solicitud,
+            estado_solicitud=self.solicitud.estado_solicitud,
+            fecha_solicitud=self.solicitud.fecha_solicitud,
+            alumno=self
+        )
+
+
+    def rechazar_solicitud(self):
+        self.solicitud.estado_solicitud = 'Rechazada'
+        self.solicitud.save()
+        solicitud_historial = Historial_solicitud.objects.create(
+            tipo_solicitud=self.solicitud.tipo_solicitud,
+            estado_solicitud=self.solicitud.estado_solicitud,
+            fecha_solicitud=self.solicitud.fecha_solicitud,
+            alumno=self
+        )
+
+
+    def historial_solicitudes_existe(self):
+        if historial_solicitud := Historial_solicitud.objects.filter(alumno=self):
+            return True
+        else:
+            return False
+
+    def obtener_historial_solicitudes(self):
+        if historial_solicitud := Historial_solicitud.objects.filter(alumno=self):
+            return historial_solicitud.filter(alumno=self)
+        else:
+            return None
+
+    def obtener_credencial_alumno(self):
+        return self.credencial
+
+    def crear_credencial_alumno(self):
+        self.credencial = Credencial.objects.create(estado_credencial='Inactiva')
+        self.save()
+
+    def activar_credencial_alumno(self):
+        self.credencial.estado_credencial = 'Activa'
+        self.credencial.save()
+
+    def desactivar_credencial_alumno(self):
+        self.credencial.estado_credencial = 'Inactiva'
+        self.credencial.save()
 
     def __str__(self) -> str:
         return self.nombre
 
+class Historial_solicitud(models.Model):
+    tipo_solicitud = models.CharField(max_length=50)
+    estado_solicitud = models.CharField(max_length=50)
+    fecha_solicitud = models.DateField(default=datetime.now)
+    alumno = models.ForeignKey('Alumno', on_delete=models.CASCADE, null=True, blank=True, related_name='alumno')
+
+    def __str__(self) -> str:
+        return self.tipo_solicitud
 
 class Ficha_medica(models.Model):
     tipo_sangre = models.CharField(max_length=3)
     alergias = models.CharField(max_length=50)
     enfermedades = models.CharField(max_length=50)
     medicamentos = models.CharField(max_length=50)
-    fecha_ultima_visita = models.DateField(default=datetime.now)
 
     def __str__(self) -> str:
         return self.tipo_sangre
@@ -106,7 +272,16 @@ class Solicitud(models.Model):
     def __str__(self) -> str:
         return self.tipo_solicitud
 
+class Contacto_emergencia(models.Model):
+    numero_telefono = models.CharField(max_length=10)
+    nombre = models.CharField(max_length=50)
+    parentesco = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.numero_telefono
+
 
 class Administrador(User):
+
     def __str__(self) -> str:
         return self.nombre
