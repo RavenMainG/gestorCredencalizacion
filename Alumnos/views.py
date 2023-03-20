@@ -188,32 +188,57 @@ def Panel_alumnos(request):
 
     if request.user.is_superuser:
         return redirect('panel_solicitudes_administrador')
-
     alumno = Alumno.objects.get(email=request.user.email)
+    if request.POST == 'POST':
+        url = alumno.imagen.url
+        nueva_url = url.split('/')
+        url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
 
-    url = alumno.imagen.url
-    nueva_url = url.split('/')
-    url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
+        context = {
+            'title': 'Panel de Alumnos',
+            'nombre_alumnos': alumno.nombre,
+            'apellido_alumnos': alumno.apellido,
+            'matricula_alumnos': alumno.matricula,
+            'carrera_alumnos': alumno.carrera,
+            'cuatrimestre_alumnos': alumno.cuatrimestre,
+            'numero_telefono_alumnos': alumno.numero_telefono,
+            'fecha_nacimiento_alumnos': alumno.fecha_nacimiento,
+            'direccion_alumnos': alumno.direccion,
+            'tipo_alumno_alumnos': alumno.tipo_alumno,
+            'email_alumnos': alumno.email,
+            'estado_credencial': alumno.credencial.estado_credencial,
+            'imagen': url,
+        }
 
-    context = {
-        'title': 'Panel de Alumnos',
-        'nombre_alumnos': alumno.nombre,
-        'apellido_alumnos': alumno.apellido,
-        'matricula_alumnos': alumno.matricula,
-        'carrera_alumnos': alumno.carrera,
-        'cuatrimestre_alumnos': alumno.cuatrimestre,
-        'numero_telefono_alumnos': alumno.numero_telefono,
-        'fecha_nacimiento_alumnos': alumno.fecha_nacimiento,
-        'direccion_alumnos': alumno.direccion,
-        'tipo_alumno_alumnos': alumno.tipo_alumno,
-        'email_alumnos': alumno.email,
-        'estado_credencial': alumno.credencial.estado_credencial,
-        'imagen': url,
-    }
+        print(url)
 
-    print(url)
+        return render(request, 'Alumnos/panel/panel_alumnos.html', context)
+    else:
 
-    return render(request, 'Alumnos/panel/panel_alumnos.html', context)
+        url = alumno.imagen.url
+        nueva_url = url.split('/')
+        url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
+
+        context = {
+            'title': 'Panel de Alumnos',
+            'nombre_alumnos': alumno.nombre,
+            'apellido_alumnos': alumno.apellido,
+            'matricula_alumnos': alumno.matricula,
+            'carrera_alumnos': alumno.carrera,
+            'cuatrimestre_alumnos': alumno.cuatrimestre,
+            'numero_telefono_alumnos': alumno.numero_telefono,
+            'fecha_nacimiento_alumnos': alumno.fecha_nacimiento,
+            'direccion_alumnos': alumno.direccion,
+            'tipo_alumno_alumnos': alumno.tipo_alumno,
+            'email_alumnos': alumno.email,
+            'estado_credencial': alumno.credencial.estado_credencial,
+            'imagen': url,
+        }
+
+        print(url)
+
+        return render(request, 'Alumnos/panel/panel_alumnos.html', context)
+
 
 @no_cache
 @login_required
