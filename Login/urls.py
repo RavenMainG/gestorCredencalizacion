@@ -10,7 +10,7 @@ urlpatterns = [
     path('registro_alumnos', views.registro_alumnos, name='registro_alumnos'),
     path('', include(administradores_urls)),
 
-    path('registro_administrador', views.registra_admin, name='registro_administrador'),
+    path('registro_administrador/', views.registra_admin, name='registro_administrador'),
 
     # Rutas para el administrador
     path('login_administrador', views.Login_admin, name='login_administrador'),
@@ -28,4 +28,6 @@ urlpatterns = [
     path('generar_pdf/<str:matricula>', alumnos_views.Generar_credencial_pdf, name='generar_pdf'),
 
     path('credencial/', alumnos_views.Credencial_pdf, name='credencial'),
+
+    path('gen_pdf/<str:matricula>', views.Gen_pdf, name='gen_pdf'),
 ]

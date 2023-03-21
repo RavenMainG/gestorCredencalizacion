@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Alumno, Credencial
+from .models import Alumno, Credencial, User
 from django.contrib.auth import authenticate, login, logout
 
 from pathlib import Path
@@ -121,6 +121,10 @@ def registra_admin(request):
         formAdmin = RegistrarAdministrador(request.POST)
         if formAdmin.is_valid():
             formAdmin.save()
+            admin = User.objects.get(email=request.POST['email'])
+            admin.is_superuser = True
+            admin.is_staff = True
+            admin.save()
             return redirect('home')
         else:
             context = {
@@ -200,3 +204,6 @@ def Qr(request, matricula):
     QRimg.save(response, "PNG")
     return response
 
+def Gen_pdf(reques, matricula):
+    alumno = Alumno.objects.get(matricula=matricula)
+    return render(reques, 'Alumnos/gen_pdf/gen_pdf.html', {'alumno': alumno})

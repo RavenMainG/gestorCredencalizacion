@@ -342,3 +342,5 @@ def Credencial_pdf(request):
         'permite_descargar': permite_descargar,
     }
     return render(request, 'Alumnos/credencial/credencial.html', context)
+
+
