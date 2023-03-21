@@ -6,8 +6,88 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{% static 'Alumnos/credencial/crendencial.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+{#    <link rel="stylesheet" href="{% static 'Alumnos/credencial/crendencial.css' %}">#}
+    <style>
+        .cards-grid {
+            text-align: center;
+        }
+
+        .flip-card {
+            display: inline-block;
+            width: 400px;
+            margin: 20px;
+        }
+
+        .imagen {
+            width: 10rem;
+            height: 10rem;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 32px;
+        }
+
+        .contenedor {
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .cards-grid {
+            display: flex;
+            grid-gap: 80px;
+            padding-bottom: 60px;
+        }
+
+        /* FLIP CARD */
+        .flip-card {
+            width: 340px;
+            height: 600px;
+            perspective: 2000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 28px;
+            transition: all 550ms cubic-bezier(0.1, 0.22, 0.8, 1.13);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            backface-visibility: visible;
+        }
+
+        .flip-card-front {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 2rem;
+        }
+
+        .flip-card-back {
+            font-size: 1.25rem;
+            text-align: center;
+            display: grid;
+            place-items: center;
+            padding: 32px;
+            background-color: #B1CFC8;
+            {#transform: rotateY(180deg);#}
+        }
+    </style>
     <title>Document</title>
+
 </head>
 <body>
 <div class="cards-grid">
@@ -15,13 +95,13 @@
         <div class="flip-card-inner">
             <div class="flip-card-front"
                  style="background-image: url('https://img.freepik.com/vector-gratis/fondo-monocromatico-blanco-estilo-papel_52683-66443.jpg?w=1380&t=st=1679244857~exp=1679245457~hmac=0dbb707c5834d85db8ddd325cec0e5c45a061e33a4e88cb8570c15694b4f8f0a');">
-                <div class="card-content card-content1">
+                <div class="card-content card-content1 m-0 p-0">
                     <div class="contenedor_img">
                         <p class="nombre_universidad">Universidad Politecnica de Tapachula</p>
                         <img src="{% static 'Alumnos/img/LogoUPTap.png' %}" class="profile-pic" alt="">
                     </div>
-                    <div class="contenedor_datos">
-                        <img src="{% url 'qr' matricula=alumno.matricula %}" class="card-img-top imagen">
+                    <div class="contenedor_datos m-0 p-0">
+                        <img src="{% url 'qr' matricula=alumno.matricula %}" class="imagen mt-0" alt="">
                         <p class="dato">Tipo de sangre: <span
                                 class="dato_remarcado">{{ alumno.ficha_medica.tipo_sangre }}</span></p>
                         <p class="dato">Telefono de emergencia: <span
@@ -29,9 +109,7 @@
                         </p>
                     </div>
 
-                    <div>
-                        <img src="{% static 'Alumnos/img/dgutyp.png' %}" class="img_asset" alt=""/>
-                    </div>
+
                 </div>
             </div>
             <div class="flip-card-back"
@@ -45,7 +123,12 @@
                             <p class="student-career">{{ alumno.carrera }}</p>
                             <p class="student-name">{{ alumno.nombre }} {{ alumno.apellido }}</p>
                             <p class="student-id">{{ alumno.matricula }}</p>
+
+
                         </div>
+                    </div>
+                    <div>
+                        <img src="{% static 'Alumnos/img/dgutyp.png' %}" class="img_asset" alt=""/>
                     </div>
                 </div>
             </div>

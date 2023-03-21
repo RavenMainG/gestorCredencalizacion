@@ -116,7 +116,6 @@ def registro_alumnos(request):
 
 def registra_admin(request):
 
-
     if request.method == 'POST':
         email = request.POST['email']
         password1 = request.POST['password1']
@@ -134,10 +133,7 @@ def registra_admin(request):
 
 
     else:
-        context = {
-            'formAdmin': formAdmin
-        }
-        return render(request, 'Login/registro_admin/registro_admin.html', context)
+        return render(request, 'Login/registro_admin/registro_admin.html')
         
 
 def Login_admin(request):
