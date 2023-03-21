@@ -6,7 +6,6 @@ from .models import Alumno, Credencial
 from .models import Administrador
 
 class RegistrarAdministrador( UserCreationForm):
-
     class Meta:
         model = Administrador
         fields = ['email', 'password1', 'password2']

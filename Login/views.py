@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Alumno, Credencial, User
+from .models import Alumno, Credencial, Administrador
 from django.contrib.auth import authenticate, login, logout
 
 from pathlib import Path
@@ -115,22 +115,24 @@ def registro_alumnos(request):
         return render(request, 'Login/registro_alumnos/registro_alumnos.html')
 
 def registra_admin(request):
-    formAdmin = RegistrarAdministrador()
+
 
     if request.method == 'POST':
-        formAdmin = RegistrarAdministrador(request.POST)
-        if formAdmin.is_valid():
-            formAdmin.save()
-            admin = User.objects.get(email=request.POST['email'])
-            admin.is_superuser = True
-            admin.is_staff = True
-            admin.save()
-            return redirect('home')
-        else:
-            context = {
-                'error': 'Error al registrar'
-            }
-            return render(request, 'Login/registro_admin/registro_admin.html', context)
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        crear_admin = Administrador.objects.create_superuser(
+            email=email,
+            password=password1
+        )
+
+        context = {
+            'mensaje': 'Usuario registrado correctamente'
+        }
+        return render(request, 'Login/registro_admin/registro_admin.html', context)
+
+
     else:
         context = {
             'formAdmin': formAdmin
