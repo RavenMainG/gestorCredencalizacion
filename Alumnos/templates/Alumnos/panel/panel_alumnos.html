@@ -3,39 +3,169 @@
 {% load static %}
 {% block content %}
 
-
+    <div class="card-header mb-1 bg-success">
+        <h1 class="text-center">Tus datos generales</h1>
+    </div>
 
     <div class="card tarjeta container mb-5">
 
-        <div class="">
+        {#        <div class="">#}
+        {#            <div class="container">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-12">#}
+        {#                        <div class="card">#}
+        {#                            <div class="card-body">#}
+        {#                                <div class="row">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex justify-content-between">#}
+        {#                                            <div class="d-flex flex-row align-items-center">#}
+        {#                                                <div class="d-flex flex-column">#}
+        {#                                                    <h5 class="mb-0">Tarjeta de estudiante</h5>#}
+        {#                                                    <p class="mb-0">Universidad Politecnica de Tapachula</p>#}
+        {#                                                </div>#}
+        {#                                            </div>#}
+        {#                                            <div class="d-flex flex-row align-items-center">#}
+        {#                                                <div class="d-flex flex-column">#}
+        {#                                                    <h5 class="mb-0">Fecha de emisión</h5>#}
+        {#                                                    <p class="mb-0">{{ fecha_nacimiento_alumnos }}</p>#}
+        {#                                                </div>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Nombre</h5>#}
+        {#                                                <p class="mb-0">{{ nombre_alumnos }} {{ apellido_alumnos }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Matricula</h5>#}
+        {#                                                <p class="mb-0">{{ matricula_alumnos }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Carrera</h5>#}
+        {#                                                <p class="mb-0">{{ carrera_alumnos }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Estado de la credencial</h5>#}
+        {#                                                <p class="mb-0">{{ estado_credencial }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Correo electrónico</h5>#}
+        {#                                                <p class="mb-0">{{ email_alumnos }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                                <div class="row mt-3">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex flex-row align-items-center">#}
+        {#                                            <div class="d-flex flex-column">#}
+        {#                                                <h5 class="mb-0">Teléfono</h5>#}
+        {#                                                <p class="mb-0">{{ numero_telefono_alumnos }}</p>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {##}
+        {#                                <div class="row mt-5">#}
+        {#                                    <div class="col-12">#}
+        {#                                        <div class="d-flex justify-content-between">#}
+        {#                                            <div class="d-flex flex-row align-items-center">#}
+        {#                                                <div class="d-flex flex-column">#}
+        {#                                                    <h5 class="mb-0">Tarjeta de estudiante</h5>#}
+        {#                                                    <img src="{% static 'Alumnos/img/user-in-a-square.png' %}" class="card-img-top rounded-circle imagen" alt=""/>#}
+        {#                                                </div>#}
+        {#                                            </div>#}
+        {#                                            <div class="d-flex flex-row align-items-center">#}
+        {#                                                <div class="d-flex flex-column">#}
+        {#                                                    <h5 class="mb-0">QR</h5>#}
+        {#                                                    {% if estado_credencial != 'Inactiva' %}#}
+        {#                                                        <img src="{% url 'qr' matricula=matricula_alumnos %}"#}
+        {#                                                             class="card-img-top imagen">#}
+        {#                                                    {% endif %}#}
+        {#                                                </div>#}
+        {#                                            </div>#}
+        {#                                        </div>#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {##}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        {#    </div>#}
 
-        </div>
 
-        <img src="{% static 'Alumnos/img/user-in-a-square.png' %}" class="card-img-top rounded-circle imagen" alt="..."/>
+        <img src="{% static 'Alumnos/img/user-in-a-square.png' %}" class="card-img-top rounded-circle imagen" alt="...">
         <div class="card-body p-5">
             <h5>{{ nombre_alumnos }}</h5>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Correo electrónico:<span class="font-weight-bold">{{ email_alumnos }}</span>
+            <li class="list-group-item">
+                Correo electrónico:
+                <span class="font-weight-bold">{{ email_alumnos }}</span>
             </li>
-            <li class="list-group-item">Matricula:<span class="font-weight-bold">{{ matricula_alumnos }}</span></li>
-            <li class="list-group-item">Teléfono:<span class="font-weight-bold">{{ numero_telefono_alumnos }}</span>
+            <li class="list-group-item">
+                Matrícula:
+                <span class="font-weight-bold">{{ matricula_alumnos }}</span>
             </li>
-            <li class="list-group-item">Dirección:<span class="font-weight-bold">{{ direccion_alumnos }}</span></li>
-            <li class="list-group-item">Fecha de Nacimiento:<span
-                    class="font-weight-bold">{{ fecha_nacimiento_alumnos }}</span></li>
-            <li class="list-group-item">Tipo de Alumno:<span class="font-weight-bold">{{ tipo_alumno_alumnos }}</span>
+            <li class="list-group-item">
+                Teléfono:
+                <span class="font-weight-bold">{{ numero_telefono_alumnos }}</span>
             </li>
-            <li class="list-group-item">Ingieneria:<span class="font-weight-bold">{{ carrera_alumnos }}</span></li>
-            <li class="list-group-item">Estado de la credencial:<span
-                    class="font-weight-bold"> {{ estado_credencial }}</span></li>
-
-
+            <li class="list-group-item">
+                Dirección:
+                <span class="font-weight-bold">{{ direccion_alumnos }}</span>
+            </li>
+            <li class="list-group-item">
+                Fecha de Nacimiento:
+                <span class="font-weight-bold">{{ fecha_nacimiento_alumnos }}</span>
+            </li>
+            <li class="list-group-item">
+                Tipo de Alumno:
+                <span class="font-weight-bold">{{ tipo_alumno_alumnos }}</span>
+            </li>
+            <li class="list-group-item">
+                Ingeniería:
+                <span class="font-weight-bold">{{ carrera_alumnos }}</span>
+            </li>
+            <li class="list-group-item">
+                Estado de la credencial:
+                <span class="font-weight-bold">{{ estado_credencial }}</span>
+            </li>
         </ul>
 
         {% if estado_credencial != 'Inactiva' %}
-            <img src="{% url 'qr' matricula=matricula_alumnos %}" class="card-img-top imagen">
-
+            <img src="{% url 'qr' matricula=matricula_alumnos %}" class="card-img-top imagen" alt="">
         {% endif %}
 
 

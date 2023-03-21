@@ -146,7 +146,7 @@ def Perfil_alumnos(request):
         alumno.numero_telefono = request.POST['numero_telefono']
         alumno.fecha_nacimiento = request.POST['fecha_nacimiento']
         alumno.direccion = request.POST['direccion']
-        alumno.email = request.POST['email']
+        # alumno.email = request.POST['email']
         alumno.save()
 
         context = {
@@ -161,6 +161,7 @@ def Perfil_alumnos(request):
             'direccion_alumnos': alumno.direccion,
             'tipo_alumno_alumnos': alumno.tipo_alumno,
             'email_alumnos': alumno.email,
+            'mensaje': 'Se actualizo tu perfil'
         }
 
         return render(request, 'Alumnos/perfil/perfil_alumno.html', context)
@@ -331,8 +332,13 @@ def Credencial_pdf(request):
     url = alumno.imagen.url
     nueva_url = url.split('/')
     url = nueva_url[nueva_url.__len__() - 2] + "/" + nueva_url[nueva_url.__len__() - 1]
+    if(alumno.credencial.estado_credencial == 'Activa'):
+        permite_descargar = True
+    else:
+        permite_descargar = False
     context = {
         'alumno': alumno,
         'imagen': url,
+        'permite_descargar': permite_descargar,
     }
     return render(request, 'Alumnos/credencial/credencial.html', context)

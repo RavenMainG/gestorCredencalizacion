@@ -1,11 +1,12 @@
 {% extends 'Alumnos/layouts/base.html' %}
 
 {% block content %}
+    <div class="card-header mb-1 bg-success">
+        <h1 class="text-center">{{ title }}</h1>
+    </div>
     <main class="container">
-        <h2>{{ title }}</h2>
 
         <form method="post" class="row g-3 mt-5 gap-2">
-            <h1 class="display-5 text-primaty text-center text-white"><b>{{ title }}</b></h1>
             {% csrf_token %}
 
             {% if error %}
@@ -88,9 +89,10 @@
 
             <div class="col-12 mt-5">
                 <center>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary btn-lg fade-in">
                         Actualizar datos
                     </button>
+
                 </center>
             </div>
         </form>
