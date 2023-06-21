@@ -1,0 +1,47 @@
+{% extends 'Administradores/layouts/base.html' %}
+
+{% block content %}
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <h1 class="text-center mb-5">Editar alumno</h1>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="carrera" class="form-label">Carrera</label>
+          <input type="text" class="form-control" id="carrera" name="carrera" value="{{alumno.carrera}}">
+        </div>
+        <div class="mb-3">
+          <label for="cuatrimestre" class="form-label">Cuatrimestre</label>
+          <input type="text" class="form-control" id="cuatrimestre" name="cuatrimestre" value="{{alumno.cuatrimestre}}">
+        </div>
+        <div class="mb-3">
+          <label for="numero_telefono" class="form-label">Número de teléfono</label>
+          <input type="text" class="form-control" id="numero_telefono" name="numero_telefono" value="{{alumno.numero_telefono}}">
+        </div>
+        <div class="mb-3">
+          <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+          <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{alumno.fecha_nacimiento}}">
+        </div>
+        <div class="mb-3">
+          <label for="direccion" class="form-label">Dirección</label>
+          <input type="text" class="form-control" id="direccion" name="direccion" value="{{alumno.direccion}}">
+        </div>
+        <div class="mb-3">
+          <label for="tipo_alumno" class="form-label">Tipo de alumno</label>
+          <input type="text" class="form-control" id="tipo_alumno" name="tipo_alumno" value="{{alumno.tipo_alumno}}">
+        </div>
+        <div class="mb-3">
+          <label for="imagen" class="form-label">Imagen</label>
+          <input type="file" class="form-control" id="imagen" name="imagen">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
